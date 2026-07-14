@@ -1,0 +1,1 @@
+typescript, nextjs16, tailwindcss,react19
