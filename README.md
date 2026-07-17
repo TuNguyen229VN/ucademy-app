@@ -1,1 +1,1 @@
-typescript, nextjs16, tailwindcss,react19
+typescript, nextjs16, tailwindcssv4,react19

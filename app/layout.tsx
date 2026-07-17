@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
 import "./globals.css";
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-});
+import { manrope } from "../utils";
+import Sidebar from "../components/layout/Sidebar";
 
 export const metadata: Metadata = {
   title: "Ucademy",
@@ -23,7 +19,12 @@ export default function RootLayout({
       className={`${manrope.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <div className="wrapper grid grid-cols-[300px_minmax(0,1fr)] h-screen">
+          <Sidebar/>
+          <main>{children}</main>
+        </div>
+      </body>
     </html>
   );
 }
