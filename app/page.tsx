@@ -1,6 +1,6 @@
+import { connectToDatabase } from "@/libs/mongoose";
 
-export default function Home() {
-  return (
-   <div>Mian</div>
-  );
+export default async function Home() {
+  const connect = await connectToDatabase();
+  return <div>Mian</div>;
 }
