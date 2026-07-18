@@ -1,36 +1,36 @@
 import { menuItems } from "@/constants";
-import { ReactNode } from "react";
+import Link from "next/link";
+import ActiveLink from "../common/ActiveLink";
+import { TMenuItem } from "@/types";
 
 const Sidebar = () => {
   return (
     <div className="p-5 border-r border-r-gray-200">
-      <a href="/" className="font-bold text-3xl inline-block mb-5">
-        Ucademy
-      </a>
+      <Link href="/" className="font-bold text-3xl inline-block mb-5">
+        <span className="text-primary">U</span>
+        cademy
+      </Link>
       <ul className="flex flex-col gap-2">
-       {menuItems.map((item)=>(
-        <MenuItem key={item.title} title={item.title} url={item.url} icon={item.icon}/>
-       ))}
+        {menuItems.map((item) => (
+          <MenuItem
+            key={item.title}
+            title={item.title}
+            url={item.url}
+            icon={item.icon}
+          />
+        ))}
       </ul>
     </div>
   );
 };
 
-const MenuItem = ({
-  url = "/",
-  title = "",
-  icon,
-}: {
-  url: string;
-  title: string;
-  icon?: ReactNode;
-}) => {
+const MenuItem = ({ url = "/", title = "", icon }: TMenuItem) => {
   return (
     <li>
-      <a href={url} className="p-3 rounded-md flex items-center gap-3 hover:text-primary  hover:bg-primary/10 transition-all">
+      <ActiveLink url={url}>
         {icon}
         {title}
-      </a>
+      </ActiveLink>
     </li>
   );
 };

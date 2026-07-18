@@ -1,1 +1,1 @@
-typescript, nextjs16, tailwindcssv4,react19
+typescript, nextjs16, tailwindcssv4,react19, mongodb
