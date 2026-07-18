@@ -1,5 +1,4 @@
-import IconExplore from "@/components/icons/IconExplore";
-import IconPlay from "@/components/icons/IconPlay";
+import { IconExplore, IconPlay } from "@/components/icons";
 import { ReactNode } from "react";
 
 export const menuItems: {
