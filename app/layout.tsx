@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { manrope } from "../utils";
 import Sidebar from "../components/layout/Sidebar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Ucademy",
@@ -20,10 +21,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <div className="wrapper grid grid-cols-[300px_minmax(0,1fr)] h-screen">
-          <Sidebar/>
-          <main>{children}</main>
-        </div>
+        <ClerkProvider>{children}</ClerkProvider>
       </body>
     </html>
   );
