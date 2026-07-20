@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import { ComponentProps } from "react";
 
 const IconUser = (props: ComponentProps<"svg">) => {
   return (
