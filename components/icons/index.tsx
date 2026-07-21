@@ -1,6 +1,10 @@
-export { default as IconExplore } from "./IconExplore";
-export { default as IconPlay } from "./IconPlay";
-export { default as IconOrder } from "./IconOrder";
+export { default as IconClock } from "./IconClock";
 export { default as IconComment } from "./IconComment";
+export { default as IconDefault } from "./IconDefault";
+export { default as IconExplore } from "./IconExplore";
+export { default as IconEye } from "./IconEye";
+export { default as IconOrder } from "./IconOrder";
+export { default as IconPlay } from "./IconPlay";
+export { default as IconStar } from "./IconStar";
 export { default as IconStudy } from "./IconStudy";
 export { default as IconUser } from "./IconUser";
