@@ -1,1 +1,1 @@
-typescript, nextjs16, tailwindcssv4,react19, mongodb, clerk
+typescript, nextjs16, tailwindcssv4,react19, mongodb, clerk,sharp (toi uu img),Shadcn
