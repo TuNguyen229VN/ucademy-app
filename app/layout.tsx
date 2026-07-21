@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { manrope } from "../utils";
 import { ClerkProvider } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Ucademy",
@@ -16,7 +17,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", manrope.variable)}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

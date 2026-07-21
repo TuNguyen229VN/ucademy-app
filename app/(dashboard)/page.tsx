@@ -1,3 +1,4 @@
+import { CourseGrid } from "@/components/common";
 import CourseItem from "@/components/courses/CourseItem";
 import Heading from "@/components/typography/Heading";
 
@@ -5,11 +6,11 @@ const DashboardPage = () => {
   return (
     <div>
       <Heading>Khám phá</Heading>
-      <div className="grid grid-cols-3 gap-8 mt-8">
+      <CourseGrid>
         <CourseItem />
         <CourseItem />
         <CourseItem />
-      </div>
+      </CourseGrid>
     </div>
   );
 };
