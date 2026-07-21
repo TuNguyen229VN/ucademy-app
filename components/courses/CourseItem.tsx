@@ -20,7 +20,7 @@ const CourseItem = () => {
     },
   ];
   return (
-    <div className="bg-white border-gray-200 p-4 rounded-2xl">
+    <div className="bg-white dark:bg-grayDarker dark:border-gray-200/10 border-gray-200 p-4 rounded-2xl">
       <Link href={"#"} className="block h-45 relative">
         <Image
           src={
@@ -41,7 +41,7 @@ const CourseItem = () => {
         <h3 className="font-bold text-lg mb-3">
           Khóa học NextJS Pro - Xây dựng E-Learning system hoàn chỉnh
         </h3>
-        <div className="flex items-center gap-3 mb-5 text-xs text-gray-500">
+        <div className="flex items-center gap-3 mb-5 text-xs text-gray-500 dark:text-grayDark">
           {courseInfo.map((item, index) => (
             <div className="flex items-center gap-2" key={index}>
               {item.icon("size-4")}
