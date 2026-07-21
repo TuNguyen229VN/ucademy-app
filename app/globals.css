@@ -17,7 +17,7 @@
   .svg-animate {
     stroke-dashoffset: 500;
     stroke-dasharray: 500;
-    animation: dash 3s linear forwards;
+    animation: dash 1.5s linear forwards;
   }
 
   @keyframes dash {

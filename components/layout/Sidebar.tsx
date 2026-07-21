@@ -1,7 +1,7 @@
 import { menuItems } from "@/constants";
 import Link from "next/link";
-import ActiveLink from "../common/ActiveLink";
 import { TMenuItem } from "@/types";
+import { ActiveLink } from "../common";
 
 const Sidebar = () => {
   return (
