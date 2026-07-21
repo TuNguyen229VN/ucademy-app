@@ -3,10 +3,11 @@ import Link from "next/link";
 import { TMenuItem } from "@/types";
 import { ActiveLink } from "../common";
 import { UserButton } from "@clerk/nextjs";
+import { ModeToggle } from "../common/ModeToggle";
 
 const Sidebar = () => {
   return (
-    <div className="p-5 border-r border-r-gray-200 bg-white flex flex-col">
+    <div className="p-5 border-r border-r-gray-200 dark:border-gray-200/10 bg-white dark:bg-grayDarker flex flex-col">
       <Link href="/" className="font-bold text-3xl inline-block mb-5">
         <span className="text-primary">U</span>
         cademy
@@ -21,7 +22,8 @@ const Sidebar = () => {
           />
         ))}
       </ul>
-      <div className="mt-auto flex items-center justify-end">
+      <div className="mt-auto flex items-center justify-end gap-5">
+        <ModeToggle/>
         <UserButton/>
       </div>
     </div>

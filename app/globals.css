@@ -4,9 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base{
-  body{
-     @apply bg-gray-100
+@layer base {
+  body {
+    @apply bg-gray-100 dark:bg-grayDarkest dark:text-white;
   }
   html {
     @apply font-sans;
@@ -17,6 +17,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-manrope);
   --color-primary: #615efc;
+  --color-grayDarkest: #131316;
+  --color-grayDarker: #212126;
+  --color-grayDark: #9394A1;
   --font-heading: var(--font-manrope);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
