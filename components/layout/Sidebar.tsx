@@ -5,7 +5,7 @@ import { TMenuItem } from "@/types";
 import { ActiveLink } from "../common";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "../common/ModeToggle";
-import { IconUser } from "../icons";
+import { IconSignIn } from "../icons";
 
 const Sidebar = () => {
   const { userId } = useAuth();
@@ -32,7 +32,7 @@ const Sidebar = () => {
             href={"/sign-in"}
             className="rounded-lg bg-primary text-white flex-center p-1"
           >
-            <IconUser />
+            <IconSignIn/>
           </Link>
         ) : (
           <UserButton />

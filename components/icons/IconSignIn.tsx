@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 
-const IconPlay = (props: ComponentProps<"svg">) => {
+const IconSignIn = (props: ComponentProps<"svg">) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,15 +14,10 @@ const IconPlay = (props: ComponentProps<"svg">) => {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"
+        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
       />
     </svg>
   );
 };
 
-export default IconPlay;
+export default IconSignIn;
