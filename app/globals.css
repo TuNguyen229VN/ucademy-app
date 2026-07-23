@@ -19,7 +19,7 @@
   --color-primary: #615efc;
   --color-grayDarkest: #131316;
   --color-grayDarker: #212126;
-  --color-grayDark: #9394A1;
+  --color-grayDark: #9394a1;
   --font-heading: var(--font-manrope);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -59,6 +59,10 @@
 }
 
 @layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
   .svg-animate {
     stroke-dashoffset: 500;
     stroke-dasharray: 500;
