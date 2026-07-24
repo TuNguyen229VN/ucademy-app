@@ -1,14 +1,29 @@
 "use server";
 
-import User from "@/database/user.model";
+import User, { IUser } from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import { TCreateUserParams } from "@/types";
 
-export default async function createUser(params: TCreateUserParams) {
+export async function createUser(params: TCreateUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
     const newUser = await User.create(params);
     return newUser;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getUserInfo({
+  userId,
+}: {
+  userId: string;
+}): Promise<IUser | null | undefined> {
+  try {
+    await connectToDatabase();
+    const findUser = await User.findOne({ clerkId: userId });
+    if (!findUser) return null;
+    return findUser;
   } catch (error) {
     console.error(error);
   }
