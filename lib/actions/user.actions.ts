@@ -10,7 +10,7 @@ export async function createUser(params: TCreateUserParams) {
     const newUser = await User.create(params);
     return newUser;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -25,6 +25,6 @@ export async function getUserInfo({
     if (!findUser) return null;
     return findUser;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
