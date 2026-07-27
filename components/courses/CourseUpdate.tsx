@@ -16,23 +16,27 @@ const formSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     .optional()
     .or(z.literal("")),
-  price: z.coerce
+  price: z
     .number({
       error: "Vui lòng nhập số",
     })
     .int("Phải là số nguyên")
     .positive("Giá phải lớn hơn 0")
     .optional(),
-  sale_price: z.coerce
-    .number("Vui lòng nhập số")
+  sale_price: z
+    .number({
+      error: "Vui lòng nhập số",
+    })
     .int("Phải là số nguyên")
     .positive("Giá phải lớn hơn 0")
     .optional(),
   intro_url: z.string().optional(),
   desc: z.string().optional(),
   image: z.string().optional(),
-  views: z.coerce
-    .number("Vui lòng nhập số")
+  views: z
+    .number({
+      error: "Vui lòng nhập số",
+    })
     .int("Phải là số nguyên")
     .positive("Giá phải lớn hơn 0")
     .optional(),
@@ -72,6 +76,11 @@ const CourseUpdate = () => {
       image: "",
       status: ECourseStatus.PENDING,
       level: ECourseLevel.BEGINNER,
+      info: {
+        requirements: [],
+        benefits: [],
+        qa: [{ question: "", answer: "" }],
+      },
       views: 0,
     },
     mode: "onSubmit",
