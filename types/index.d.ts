@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ReactNode } from "react";
 
 type TActiveLinkProps = {
@@ -22,5 +23,6 @@ type TCreateUserParams = {
 type TCreateCourseParams = {
   title: string;
   slug: string;
+  author: Types.ObjectId;
 };
 export { TActiveLinkProps, TMenuItem, TCreateUserParams, TCreateCourseParams };
