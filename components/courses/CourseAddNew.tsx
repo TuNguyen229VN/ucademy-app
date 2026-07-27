@@ -1,22 +1,27 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 import { Input } from "../ui/input";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import slugify from "slugify";
 import { createCourse } from "@/lib/actions/course.actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { IUser } from "@/database/user.model";
 
 const formSchema = z.object({
   title: z.string().min(10, "Tên khóa học phải có ít nhất 10 ký tự"),
-  slug: z.string().optional(),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .optional()
+    .or(z.literal("")),
 });
 
-function CourseAddNew() {
+function CourseAddNew({ user }: { user: IUser }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,6 +34,21 @@ function CourseAddNew() {
     mode: "onSubmit",
   });
 
+  const isSlugEditedManually = useRef(false);
+
+  const titleValue = useWatch({
+    control: form.control,
+    name: "title",
+  });
+
+  useEffect(() => {
+    if (isSlugEditedManually.current) return; // user đã tự nhập slug -> không auto ghi đè nữa
+    const newSlug = titleValue
+      ? slugify(titleValue, { lower: true, locale: "vi", trim: true })
+      : "";
+    form.setValue("slug", newSlug, { shouldValidate: false });
+  }, [titleValue, form]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
@@ -40,8 +60,13 @@ function CourseAddNew() {
             lower: true,
             locale: "vi",
           }),
+        author: user._id,
       };
       const res = await createCourse(data);
+      if (!res?.success) {
+        toast.error(res?.message);
+        return;
+      }
       if (res?.success) {
         toast.success("Tạo khóa học thành công");
       }
@@ -52,7 +77,6 @@ function CourseAddNew() {
       toast.error("Tạo khóa học thất bại");
     } finally {
       setIsSubmitting(false);
-      form.reset();
     }
   }
 
@@ -93,6 +117,10 @@ function CourseAddNew() {
                 id="form-rhf-slug"
                 placeholder="khoa-hoc-lap-trinh"
                 aria-invalid={fieldState.invalid}
+                onChange={(e) => {
+                  isSlugEditedManually.current = true;
+                  field.onChange(e);
+                }}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
