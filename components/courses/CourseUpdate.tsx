@@ -8,6 +8,10 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import { ECourseLevel, ECourseStatus } from "@/types/enums";
 import { InputGroupTextarea } from "../ui/input-group";
+import { updateCourse } from "@/lib/actions/course.actions";
+import { ICourse } from "@/database/course.model";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
   title: z.string().min(10, "Tên khóa học phải có ít nhất 10 ký tự"),
@@ -38,7 +42,6 @@ const formSchema = z.object({
       error: "Vui lòng nhập số",
     })
     .int("Phải là số nguyên")
-    .positive("Giá phải lớn hơn 0")
     .optional(),
   status: z
     .enum([
@@ -57,31 +60,34 @@ const formSchema = z.object({
   info: z.object({
     requirements: z.array(z.string()).optional(),
     benefits: z.array(z.string()).optional(),
-    qa: z.array(z.object({ question: z.string(), answer: z.string() })),
+    qa: z
+      .array(z.object({ question: z.string(), answer: z.string() }))
+      .optional(),
   }),
 });
 
-const CourseUpdate = () => {
+const CourseUpdate = ({ data }: { data: ICourse }) => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      slug: "",
-      price: 0,
-      sale_price: 0,
-      intro_url: "",
-      desc: "",
-      image: "",
-      status: ECourseStatus.PENDING,
-      level: ECourseLevel.BEGINNER,
+      title: data.title,
+      slug: data.slug,
+      price: data.price,
+      sale_price: data.sale_price,
+      intro_url: data.intro_url,
+      desc: data.desc,
+      image: data.image,
+      status: data.status,
+      level: data.level,
       info: {
         requirements: [],
         benefits: [],
         qa: [{ question: "", answer: "" }],
       },
-      views: 0,
+      views: data.views,
     },
     mode: "onSubmit",
   });
@@ -89,6 +95,25 @@ const CourseUpdate = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
+      const res = await updateCourse({
+        slug: data.slug,
+        updateData: {
+          title: values.title,
+          slug: values.slug,
+          price: values.price,
+          sale_price: values.sale_price,
+          intro_url: values.intro_url,
+          desc: values.desc,
+          views: values.views,
+        },
+      });
+
+      if (values.slug) {
+        router.replace(`/manage/courses/update?slug=${values.slug}`);
+      }
+      if (res?.success) {
+        toast.success(res.message);
+      }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -151,6 +176,7 @@ const CourseUpdate = () => {
                 id="form-rhf-price"
                 placeholder="599.000"
                 aria-invalid={fieldState.invalid}
+                onChange={(e) => field.onChange(Number(e.target.value))}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -166,7 +192,9 @@ const CourseUpdate = () => {
                 {...field}
                 id="form-rhf-sale_price"
                 placeholder="999.000"
+                type="number"
                 aria-invalid={fieldState.invalid}
+                onChange={(e) => field.onChange(Number(e.target.value))}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -231,6 +259,7 @@ const CourseUpdate = () => {
                 placeholder="1000"
                 aria-invalid={fieldState.invalid}
                 type="number"
+                onChange={(e) => field.onChange(Number(e.target.value))}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

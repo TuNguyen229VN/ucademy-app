@@ -1,20 +1,16 @@
 import { CourseGrid } from "@/components/common";
 import CourseItem from "@/components/courses/CourseItem";
 import Heading from "@/components/typography/Heading";
+import { getAllCourse } from "@/lib/actions/course.actions";
 
 const DashboardPage = async () => {
-  // const user = await createUser({
-  //   clerkId: "clerk_123",
-  //   email_address: "tunguyen2209@gmail.com",
-  //   username: "tu",
-  // });
+  const courses = (await getAllCourse()) || [];
   return (
     <div>
       <Heading>Khám phá</Heading>
       <CourseGrid>
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
+        {courses?.length > 0 &&
+          courses?.map((item) => <CourseItem key={item?.slug} data={item} />)}
       </CourseGrid>
     </div>
   );

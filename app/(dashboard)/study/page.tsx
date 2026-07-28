@@ -7,9 +7,10 @@ const StudyPage = () => {
     <>
       <Heading>Khu vực học tập</Heading>
       <CourseGrid>
+        alo
+        {/* <CourseItem />
         <CourseItem />
-        <CourseItem />
-        <CourseItem />
+        <CourseItem /> */}
       </CourseGrid>
     </>
   );
