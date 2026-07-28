@@ -1,3 +1,4 @@
+import { ICourse } from "@/database/course.model";
 import { Types } from "mongoose";
 import { ReactNode } from "react";
 
@@ -25,4 +26,15 @@ type TCreateCourseParams = {
   slug: string;
   author: Types.ObjectId;
 };
-export { TActiveLinkProps, TMenuItem, TCreateUserParams, TCreateCourseParams };
+
+type TUpdateCourseParams = {
+  slug: string;
+  updateData: Partial<ICourse>;
+};
+export {
+  TActiveLinkProps,
+  TMenuItem,
+  TCreateUserParams,
+  TCreateCourseParams,
+  TUpdateCourseParams,
+};

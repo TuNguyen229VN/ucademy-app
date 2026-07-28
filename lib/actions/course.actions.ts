@@ -1,7 +1,18 @@
 "use server";
-import { TCreateCourseParams } from "@/types";
+import { TCreateCourseParams, TUpdateCourseParams } from "@/types";
 import { connectToDatabase } from "../mongoose";
-import Course from "@/database/course.model";
+import Course, { ICourse } from "@/database/course.model";
+import { revalidatePath } from "next/cache";
+
+export async function getAllCourse(): Promise<ICourse[] | undefined> {
+  try {
+    await connectToDatabase();
+    const courses = await Course.find();
+    return courses;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function getCourseBySlug({ slug }: { slug: string }) {
   try {
@@ -27,6 +38,25 @@ export async function createCourse(params: TCreateCourseParams) {
     return {
       success: true,
       data: JSON.parse(JSON.stringify(course)),
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateCourse(params: TUpdateCourseParams) {
+  try {
+    await connectToDatabase();
+    const findCourse = await Course.findOne({ slug: params.slug });
+    if (!findCourse) return;
+    await Course.findOneAndUpdate({ slug: params.slug }, params.updateData, {
+      new: true,
+    });
+    // refresh dữ liệu mới cho trang chủ
+    revalidatePath("/");
+    return {
+      success: true,
+      message: "Cập nhật khóa học thành công",
     };
   } catch (error) {
     console.log(error);
