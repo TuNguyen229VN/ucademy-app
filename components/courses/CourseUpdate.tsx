@@ -175,6 +175,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
                 {...field}
                 id="form-rhf-price"
                 placeholder="599.000"
+                type="number"
                 aria-invalid={fieldState.invalid}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
