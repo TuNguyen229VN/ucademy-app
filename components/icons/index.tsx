@@ -9,3 +9,5 @@ export { default as IconSignIn } from "./IconSignIn";
 export { default as IconStar } from "./IconStar";
 export { default as IconStudy } from "./IconStudy";
 export { default as IconUser } from "./IconUser";
+export { default as IconAdd } from "./IconAdd";
+export { default as IconDelete } from "./IconDelete";

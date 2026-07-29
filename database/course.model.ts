@@ -18,7 +18,7 @@ export interface ICourse extends Document {
   rating: number[];
   info: {
     requirements: string[];
-    benefit: string[];
+    benefits: string[];
     qa: {
       question: string;
       answer: string;

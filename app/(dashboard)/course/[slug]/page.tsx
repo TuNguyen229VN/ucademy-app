@@ -12,16 +12,32 @@ const CourseDetailPage = async ({
   const { slug } = await params;
   const data = await getCourseBySlug({ slug });
   if (!data) return null;
+  const videoId = data.intro_url?.split("v=")[1];
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
         <div className="relative aspect-video mb-5">
-          <Image
-            src="https://images.unsplash.com/photo-1716881763995-097b7a68ea3d?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt=""
-            fill
-            className="w-full h-full object-cover rounded-lg"
-          />
+          {data.intro_url ? (
+            <>
+              <iframe
+                width="951"
+                height="535"
+                src={`https://www.youtube.com/embed/${videoId}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="w-full h-full object-fill"
+              ></iframe>
+            </>
+          ) : (
+            <Image
+              src="https://images.unsplash.com/photo-1716881763995-097b7a68ea3d?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt=""
+              fill
+              className="w-full h-full object-cover rounded-lg"
+            />
+          )}
         </div>
         <h1 className="font-bold text-3xl mb-5">{data.title}</h1>
         <BoxSection title="Mô tả">
@@ -30,19 +46,55 @@ const CourseDetailPage = async ({
         <BoxSection title="Thông tin">
           <div className="grid grid-cols-4 gap-5 mb-10">
             <BoxInfo title="Bài học">100</BoxInfo>
-            <BoxInfo title="Lượt xem">100</BoxInfo>
+            <BoxInfo title="Lượt xem">{data.views}</BoxInfo>
             <BoxInfo title="Trình độ">100</BoxInfo>
             <BoxInfo title="Thời lượng">100</BoxInfo>
           </div>
         </BoxSection>
         <BoxSection title="Yêu cầu">
           {data.info.requirements.map((r, index) => (
-            <div key={index}>{r}</div>
+            <div key={index} className="mb-3 flex items-center gap-2">
+              <span className="shrink-0 size-5 bg-primary text-white p-1 rounded flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
+                </svg>
+              </span>
+              <span>{r}</span>
+            </div>
           ))}
         </BoxSection>
         <BoxSection title="Lợi ích">
-          {data.info.requirements.map((r, index) => (
-            <div key={index}>{r}</div>
+          {data.info.benefits.map((r, index) => (
+            <div key={index} className="mb-3 flex items-center gap-2">
+              <span className="shrink-0 size-5 bg-primary text-white p-1 rounded flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
+                </svg>
+              </span>
+              <span>{r}</span>
+            </div>
           ))}
         </BoxSection>
         <BoxSection title="Q.A">
