@@ -14,6 +14,18 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useImmer } from "use-immer";
 import { IconAdd, IconDelete } from "../icons";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { courseLevel, courseStatus } from "@/constants";
+import { UploadButton } from "@/utils/uploadthing";
+import Image from "next/image";
+
 const formSchema = z
   .object({
     title: z.string().min(10, "Tên khóa học phải có ít nhất 10 ký tự"),
@@ -146,6 +158,9 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
           sale_price: values.sale_price,
           intro_url: values.intro_url,
           desc: values.desc,
+          image: values.image,
+          status: values.status,
+          level: values.level,
           views: values.views,
           info: {
             requirements: courseInfo.requirements,
@@ -166,6 +181,8 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
       setIsSubmitting(false);
     }
   }
+
+  const imageWatch = form.watch("image");
   return (
     <form
       id="form-rhf-demo"
@@ -269,8 +286,29 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
               <FieldLabel htmlFor="form-rhf-image">Ảnh đại diện</FieldLabel>
               <div
                 id="form-rhf-image"
-                className="h-50 bg-white rounded-md border border-gray-200"
-              ></div>
+                className="h-50 bg-white rounded-md border border-gray-200 flex items-center justify-center relative"
+              >
+                {!imageWatch ? (
+                  <UploadButton
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      // Do something with the response
+                      form.setValue("image", res[0].url);
+                    }}
+                    onUploadError={(error: Error) => {
+                      // Do something with the error.
+                      console.error(`ERROR! ${error.message}`);
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src={imageWatch}
+                    alt={data.title}
+                    fill
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -315,12 +353,24 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-rhf-status">Trạng thái</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-status"
-                placeholder=""
-                aria-invalid={fieldState.invalid}
-              />
+              <Select
+                items={courseStatus}
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Trạng thái" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {courseStatus.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -331,12 +381,24 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-rhf-level">Trình độ</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-level"
-                placeholder=""
-                aria-invalid={fieldState.invalid}
-              />
+              <Select
+                items={courseLevel}
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Trình độ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {courseLevel.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
