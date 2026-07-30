@@ -25,6 +25,7 @@ import {
 import { courseLevel, courseStatus } from "@/constants";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
+import { deleteUploadthingFile } from "@/lib/actions/uploadthing.actions";
 
 const formSchema = z
   .object({
@@ -105,6 +106,7 @@ const formSchema = z
 const CourseUpdate = ({ data }: { data: ICourse }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [courseInfo, setCourseInfo] = useImmer({
     requirements: data.info.requirements,
     benefits: data.info.benefits,
@@ -147,6 +149,9 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
   const { errors } = form.formState;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (isSubmitting || isUploading) {
+      return;
+    }
     setIsSubmitting(true);
     try {
       const res = await updateCourse({
@@ -288,19 +293,26 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
                 id="form-rhf-image"
                 className="h-50 bg-white rounded-md border border-gray-200 flex items-center justify-center relative"
               >
-                {!imageWatch ? (
-                  <UploadButton
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
-                      // Do something with the response
-                      form.setValue("image", res[0].url);
-                    }}
-                    onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      console.error(`ERROR! ${error.message}`);
-                    }}
-                  />
-                ) : (
+                <UploadButton
+                  className="z-10 absolute"
+                  endpoint="imageUploader"
+                  onUploadBegin={() => {
+                    setIsUploading(true);
+                  }}
+                  onClientUploadComplete={async (res) => {
+                    const newUrl = res[0].url;
+                    // Do something with the response
+                    await deleteUploadthingFile(data.image);
+                    form.setValue("image", newUrl, { shouldDirty: true });
+                    setIsUploading(false);
+                  }}
+                  onUploadError={(error: Error) => {
+                    // Do something with the error.
+                    console.error(`ERROR! ${error.message}`);
+                    setIsUploading(false);
+                  }}
+                />
+                {imageWatch && (
                   <Image
                     src={imageWatch}
                     alt={data.title}
@@ -614,7 +626,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
         type="submit"
         form="form-rhf-demo"
         className="w-37.5 dark:text-white"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isUploading}
       >
         Cập nhật khóa học
       </Button>
