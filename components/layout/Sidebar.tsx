@@ -10,7 +10,7 @@ import { IconSignIn } from "../icons";
 const Sidebar = () => {
   const { userId } = useAuth();
   return (
-    <div className="hidden p-5 border-r border-r-gray-200 dark:border-gray-200/10 bg-white dark:bg-grayDarker lg:flex flex-col fixed top-0 left-0 bottom-0 w-75">
+    <div className="hidden p-5 border-r border-r-gray-200 borderDarkMode bgDarkMode lg:flex flex-col fixed top-0 left-0 bottom-0 w-75">
       <Link href="/" className="font-bold text-3xl inline-block mb-5 ">
         <span className="text-primary">U</span>
         cademy

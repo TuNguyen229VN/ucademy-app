@@ -175,7 +175,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
         },
       });
 
-      if (values.slug) {
+      if (values.slug !== data.slug) {
         router.replace(`/manage/courses/update?slug=${values.slug}`);
       }
       if (res?.success) {
