@@ -88,6 +88,16 @@
   }
 }
 
+@layer utilities {
+  .bgDarkMode {
+    @apply bg-white dark:bg-grayDarker;
+  }
+
+  .borderDarkMode {
+    @apply dark:border-gray-200/10 ;
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
