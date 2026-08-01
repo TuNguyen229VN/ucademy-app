@@ -57,7 +57,7 @@ export async function updateCourse(params: TUpdateCourseParams) {
       new: true,
     });
     // refresh dữ liệu mới cho trang chủ
-    revalidatePath("/");
+    revalidatePath(params.path || "/");
     return {
       success: true,
       message: "Cập nhật khóa học thành công",
