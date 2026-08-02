@@ -9,6 +9,9 @@ import { ToastContainer } from "react-toastify";
 export const metadata: Metadata = {
   title: "Ucademy",
   description: "Nền tảng học lập trình trực tuyến",
+  icons: {
+    icon: "/logo_uca.ico",
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +34,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <ToastContainer 
+            <ToastContainer
               autoClose={2000}
               hideProgressBar
               className={"text-sm font-medium"}
