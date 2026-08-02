@@ -5,6 +5,13 @@ import { courseLevelTitle } from "@/constants";
 import { getCourseBySlug } from "@/lib/actions/course.actions";
 import { ECourseStatus } from "@/types/enums";
 import Image from "next/image";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
 const CourseDetailPage = async ({
   params,
@@ -17,7 +24,7 @@ const CourseDetailPage = async ({
   if (data.status !== ECourseStatus.APPROVED) return <NotFoundPage />;
   const videoId = data.intro_url?.split("v=")[1];
   return (
-    <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
+    <div className="grid lg:grid-cols-[2fr_1fr] lg:gap-10 min-h-screen">
       <div>
         <div className="relative aspect-video mb-5">
           {data.intro_url ? (
@@ -51,9 +58,9 @@ const CourseDetailPage = async ({
           <div className="leading-normal">{data.desc}</div>
         </BoxSection>
         <BoxSection title="Thông tin">
-          <div className="grid grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             <BoxInfo title="Bài học">100</BoxInfo>
-            <BoxInfo title="Lượt xem">{data.views}</BoxInfo>
+            <BoxInfo title="Lượt xem">{data.views.toLocaleString()}</BoxInfo>
             <BoxInfo title="Trình độ">{courseLevelTitle[data.level]}</BoxInfo>
             <BoxInfo title="Thời lượng">100</BoxInfo>
           </div>
@@ -104,17 +111,19 @@ const CourseDetailPage = async ({
             </div>
           ))}
         </BoxSection>
-        <BoxSection title="Q.A">
+        <BoxSection title="Q.A" className="mb-5 lg:mb-10">
           {data.info.qa.map((qa, index) => (
-            <div key={index}>
-              <div>{qa.question}</div>
-              <div>{qa.answer}</div>
-            </div>
+            <Accordion key={index}>
+              <AccordionItem value={qa.question}>
+                <AccordionTrigger>{qa.question}</AccordionTrigger>
+                <AccordionContent>{qa.answer}</AccordionContent>
+              </AccordionItem>
+            </Accordion>
           ))}
         </BoxSection>
       </div>
       <div>
-        <div className="bg-white rounded-lg p-5">
+        <div className="borderDarkMode border bgDarkMode  rounded-lg p-5">
           <div className="flex items-center gap-2 mb-3">
             <strong className="text-primary text-xl font-bold">
               {data.price}
@@ -162,9 +171,9 @@ function BoxInfo({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-lg p-5">
+    <div className="borderDarkMode border bgDarkMode rounded-lg p-5">
       <h4 className="text-sm text-slate-400 font-normal">{title}</h4>
-      <h3 className="font-bold">{children}</h3>
+      <h3 className="font-bold text-sm lg:text-base">{children}</h3>
     </div>
   );
 }
@@ -172,14 +181,16 @@ function BoxInfo({
 function BoxSection({
   title,
   children,
+  className,
 }: {
   title: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
     <>
       <h2 className="font-bold text-xl mb-5">{title}</h2>
-      <div className="mb-10">{children}</div>
+      <div className={cn("mb-10", className)}>{children}</div>
     </>
   );
 }
