@@ -94,7 +94,7 @@ export const courseLevelTitle: Record<ECourseLevel, string> = {
 
 export const commonClassNames = {
   status:
-    "bg-opacity-10 border border-current rounded-md font-medium px-3 py-1 text-xs inline-block text-center w-25",
+    "bg-opacity-10 border border-current rounded-md font-medium px-3 py-1 text-xs inline-block text-center w-25 whitespace-nowrap",
   action:
     "size-8 rounded-md border border-gray-200 flex items-center justify-center p-2  text-gray-500 hover:bg-gray-100 dark:bg-transparent borderDarkMode dark:hover:border-gray-200/20",
   paginationButton:

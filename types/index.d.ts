@@ -11,6 +11,7 @@ type TMenuItem = {
   url: string;
   title: string;
   icon?: ReactNode;
+  onlyIcon?: boolean;
 };
 
 type TCreateUserParams = {
