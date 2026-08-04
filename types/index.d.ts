@@ -33,10 +33,30 @@ type TUpdateCourseParams = {
   updateData: Partial<ICourse>;
   path?: string;
 };
+
+// Lecture
+type TCreateLectureParams = {
+  course: Types.ObjectId;
+  title?: string;
+  order?: number;
+  path?: string;
+};
+
+type TUpdateLectureParams = {
+  lectureId: string;
+  updateData: {
+    title?: string;
+    order?: number;
+    _destroy?: boolean;
+    path?: string;
+  };
+};
 export {
   TActiveLinkProps,
   TMenuItem,
   TCreateUserParams,
   TCreateCourseParams,
   TUpdateCourseParams,
+  TCreateLectureParams,
+  TUpdateLectureParams,
 };

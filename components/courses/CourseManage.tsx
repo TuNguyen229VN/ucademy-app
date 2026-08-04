@@ -201,7 +201,7 @@ const CourseManage = ({ courses }: { courses: ICourse[] }) => {
                     <div className="flex gap-3">
                       <Link
                         href={`/manage/courses/update-content?slug=${course.slug}`}
-                        title={course.title}
+                        title={"Quản lý nội dung"}
                         className={commonClassNames.action}
                       >
                         <IconStudy />
