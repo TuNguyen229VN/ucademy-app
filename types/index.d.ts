@@ -1,4 +1,5 @@
 import { ICourse } from "@/database/course.model";
+import { ILecture } from "@/database/lecture.model";
 import { Types } from "mongoose";
 import { ReactNode } from "react";
 
@@ -22,6 +23,7 @@ type TCreateUserParams = {
   avatar?: string;
 };
 
+// Course
 type TCreateCourseParams = {
   title: string;
   slug: string;
@@ -34,6 +36,11 @@ type TUpdateCourseParams = {
   path?: string;
 };
 
+type TCouseUpdateParams = {
+  _id: Types.ObjectId;
+  slug: string;
+  lectures: ILecture[];
+};
 // Lecture
 type TCreateLectureParams = {
   course: Types.ObjectId;
@@ -57,6 +64,7 @@ export {
   TCreateUserParams,
   TCreateCourseParams,
   TUpdateCourseParams,
+  TCouseUpdateParams,
   TCreateLectureParams,
   TUpdateLectureParams,
 };

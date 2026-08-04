@@ -32,6 +32,8 @@ export async function updateLecture(params: TUpdateLectureParams) {
         new: true,
       },
     );
+    revalidatePath(params.updateData.path || "/");
+    if (!res) return;
     return {
       success: true,
     };
