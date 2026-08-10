@@ -36,11 +36,10 @@ type TUpdateCourseParams = {
   path?: string;
 };
 
-type TCouseUpdateParams = {
-  _id: Types.ObjectId;
-  slug: string;
+interface TCouseUpdateParams extends Omit<ICourse, "lectures"> {
   lectures: ILecture[];
 };
+
 // Lecture
 type TCreateLectureParams = {
   course: Types.ObjectId;
