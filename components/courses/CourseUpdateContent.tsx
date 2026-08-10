@@ -8,18 +8,19 @@ import {
 import { commonClassNames } from "@/constants";
 import { IconDelete, IconEdit } from "../icons";
 import { Button } from "../ui/button";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import { createLecture, updateLecture } from "@/lib/actions/lecture.actions";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { ILecture } from "@/database/lecture.model";
 import { TCouseUpdateParams } from "@/types";
-import { useImmer } from "use-immer";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
+
 const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
   const lectures = course.lectures;
-  const [lectureEdit, setLectureEdit] = useImmer("");
-  const [lectureIndex, setLectureIndex] = useImmer(-1);
+  const [lectureEdit, setLectureEdit] = useState("");
+  const [lectureIdEdit, setLectureIdEdit] = useState("");
 
   const handleAddNewLecture = async () => {
     try {
@@ -29,8 +30,10 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
         order: lectures.length + 1,
         path: `/manage/courses/update-content?slug=${course.slug}`,
       });
-      if (res?.sucess) {
+      if (res?.success) {
         toast.success("Thêm chương mới thành công!");
+        setLectureIdEdit("");
+        setLectureEdit("");
       }
     } catch (error) {
       console.log(error);
@@ -52,13 +55,16 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
         confirmButtonText: "Có, xóa nó!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await updateLecture({
+          const res = await updateLecture({
             lectureId,
             updateData: {
               _destroy: true,
               path: `/manage/courses/update-content?slug=${course.slug}`,
             },
           });
+          if (res?.success) {
+            toast.success("Xóa chương thành công!");
+          }
         }
       });
     } catch (error) {
@@ -72,13 +78,18 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
   ) => {
     e.stopPropagation();
     try {
-      await updateLecture({
+      const res = await updateLecture({
         lectureId,
         updateData: {
           title: lectureEdit,
           path: `/manage/courses/update-content?slug=${course.slug}`,
         },
       });
+      if (res?.success) {
+        toast.success("Cập nhật thành công!");
+        setLectureIdEdit("");
+        setLectureEdit("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -88,27 +99,41 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
     <div>
       <div className="flex flex-col gap-5">
         {lectures.length > 0 &&
-          lectures.map((lecture: ILecture, index: number) => (
+          lectures.map((lecture: ILecture) => (
             <Accordion className="w-full" key={lecture._id.toString()}>
-              <AccordionItem value="item-1">
-                <AccordionTrigger>
+              <AccordionItem value={lecture._id}>
+                <AccordionTrigger
+                  render={
+                    lecture._id.toString() === lectureIdEdit ? (
+                      <div />
+                    ) : undefined
+                  }
+                  nativeButton={lecture._id.toString() !== lectureIdEdit}
+                >
                   <div className="flex items-center gap-3 justify-between w-full pr-5">
-                    <div>{lecture.title}</div>
-                    {index === lectureIndex ? (
+                    {lecture._id.toString() === lectureIdEdit ? (
                       <>
-                        <div className="w-full">
+                        <div
+                          className="w-full"
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                          onPointerDown={(e) => e.stopPropagation()}
+                        >
                           <Input
                             placeholder="Tên chương"
                             value={lectureEdit}
                             onChange={(e) => {
-                              const value = e.target.value;
-                              setLectureEdit(() => value);
+                              e.stopPropagation();
+                              setLectureEdit(e.target.value);
                             }}
                           />
                         </div>
                         <div className="flex gap-2">
                           <span
-                            className={commonClassNames.action}
+                            className={cn(
+                              commonClassNames.action,
+                              "text-green-500",
+                            )}
                             onClick={(e) =>
                               handleUpdateLecture(e, lecture._id.toString())
                             }
@@ -129,10 +154,13 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
                             </svg>
                           </span>
                           <span
-                            className={commonClassNames.action}
+                            className={cn(
+                              commonClassNames.action,
+                              "text-red-500",
+                            )}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setLectureIndex(-1);
+                              setLectureIdEdit("");
                             }}
                           >
                             <svg
@@ -157,17 +185,23 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
                         <div>{lecture.title}</div>
                         <div className="flex gap-2">
                           <span
-                            className={commonClassNames.action}
+                            className={cn(
+                              commonClassNames.action,
+                              "text-blue-500",
+                            )}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setLectureIndex(index);
+                              setLectureIdEdit(lecture._id.toString());
                               setLectureEdit(() => lecture.title);
                             }}
                           >
                             <IconEdit />
                           </span>
                           <span
-                            className={commonClassNames.action}
+                            className={cn(
+                              commonClassNames.action,
+                              "text-red-500",
+                            )}
                             onClick={(e) =>
                               handleDeleteLecture(e, lecture._id.toString())
                             }

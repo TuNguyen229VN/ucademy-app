@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { ILecture } from "@/database/lecture.model";
 
 const CourseDetailPage = async ({
   params,
@@ -23,6 +24,7 @@ const CourseDetailPage = async ({
   if (!data) return null;
   if (data.status !== ECourseStatus.APPROVED) return <NotFoundPage />;
   const videoId = data.intro_url?.split("v=")[1];
+  const lectures = data.lectures || [];
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] lg:gap-10 min-h-screen">
       <div>
@@ -120,6 +122,23 @@ const CourseDetailPage = async ({
               </AccordionItem>
             </Accordion>
           ))}
+        </BoxSection>
+        <BoxSection title="Nội dung khóa học">
+          <div className="flex flex-col gap-5">
+            {lectures.length > 0 &&
+              lectures.map((lecture: ILecture) => (
+                <Accordion className="w-full" key={lecture._id.toString()}>
+                  <AccordionItem value={lecture._id}>
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-3 justify-between w-full pr-5">
+                        <div>{lecture.title}</div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent></AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ))}
+          </div>
         </BoxSection>
       </div>
       <div>

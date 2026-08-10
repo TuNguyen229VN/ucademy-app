@@ -15,7 +15,7 @@ export async function createLecture(params: TCreateLectureParams) {
     await findCourse.save();
     revalidatePath(params.path || "/");
     return {
-      sucess: true,
+      success: true,
     };
   } catch (error) {
     console.log(error);
