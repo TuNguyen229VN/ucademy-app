@@ -16,6 +16,11 @@ import { ILecture } from "@/database/lecture.model";
 import { TCouseUpdateParams } from "@/types";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import z from "zod";
+
+const formSchema = z.object({
+  title: z.string().min(5, "Tên chương phải có ít nhất 5 ký tự"),
+});
 
 const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
   const lectures = course.lectures;
@@ -77,6 +82,14 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
     lectureId: string,
   ) => {
     e.stopPropagation();
+    const result = formSchema.safeParse({
+      title: lectureEdit.trim(),
+    });
+
+    if (!result.success) {
+      toast.error(result.error.issues[0].message);
+      return;
+    }
     try {
       const res = await updateLecture({
         lectureId,
