@@ -34,6 +34,13 @@ export async function getCourseBySlug({
         match: {
           _destroy: false,
         },
+        populate: {
+          path: "lessons",
+          model: "Lesson",
+          match: {
+            _destroy: false,
+          },
+        },
       })
       .lean();
     return JSON.parse(JSON.stringify(findCourse));

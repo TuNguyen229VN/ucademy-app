@@ -36,9 +36,14 @@ type TUpdateCourseParams = {
   path?: string;
 };
 
-interface TCouseUpdateParams extends Omit<ICourse, "lectures"> {
-  lectures: ILecture[];
+export type TUpdateCourseLecture = {
+  _id: string;
+  title: string;
+  lessons: ILesson[];
 };
+interface TCouseUpdateParams extends Omit<ICourse, "lectures"> {
+  lectures: TUpdateCourseLecture[];
+}
 
 // Lecture
 type TCreateLectureParams = {
@@ -57,6 +62,15 @@ type TUpdateLectureParams = {
     path?: string;
   };
 };
+
+type TCreateLessonParams = {
+  lecture: string;
+  course: string;
+  title?: string;
+  order?: number;
+  path?: string;
+  slug?: string;
+};
 export {
   TActiveLinkProps,
   TMenuItem,
@@ -66,4 +80,5 @@ export {
   TCouseUpdateParams,
   TCreateLectureParams,
   TUpdateLectureParams,
+  TCreateLessonParams,
 };
