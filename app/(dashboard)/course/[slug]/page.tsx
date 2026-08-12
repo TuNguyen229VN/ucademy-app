@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { ILecture } from "@/database/lecture.model";
+import { TUpdateCourseLecture } from "@/types";
 
 const CourseDetailPage = async ({
   params,
@@ -126,7 +127,7 @@ const CourseDetailPage = async ({
         <BoxSection title="Nội dung khóa học">
           <div className="flex flex-col gap-5">
             {lectures.length > 0 &&
-              lectures.map((lecture: ILecture) => (
+              lectures.map((lecture: TUpdateCourseLecture) => (
                 <Accordion className="w-full" key={lecture._id.toString()}>
                   <AccordionItem value={lecture._id}>
                     <AccordionTrigger>
