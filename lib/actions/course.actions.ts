@@ -8,6 +8,7 @@ import { connectToDatabase } from "../mongoose";
 import Course, { ICourse } from "@/database/course.model";
 import { revalidatePath } from "next/cache";
 import Lecture from "@/database/lecture.model";
+import Lesson from "@/database/lesson.model";
 
 export async function getAllCourse(): Promise<ICourse[] | undefined> {
   try {
@@ -36,7 +37,7 @@ export async function getCourseBySlug({
         },
         populate: {
           path: "lessons",
-          model: "Lesson",
+          model: Lesson,
           match: {
             _destroy: false,
           },
