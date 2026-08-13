@@ -71,6 +71,18 @@ type TCreateLessonParams = {
   path?: string;
   slug?: string;
 };
+
+type TUpdateLessonParams = {
+  lessonId: string;
+  updateData: {
+    title?: string;
+    slug?: string;
+    duration?: number;
+    video_url?: string;
+    content?: string;
+  };
+  path?: string;
+};
 export {
   TActiveLinkProps,
   TMenuItem,
@@ -81,4 +93,5 @@ export {
   TCreateLectureParams,
   TUpdateLectureParams,
   TCreateLessonParams,
+  TUpdateLessonParams,
 };
