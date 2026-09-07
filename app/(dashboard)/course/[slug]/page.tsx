@@ -12,7 +12,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { ILecture } from "@/database/lecture.model";
 import { TUpdateCourseLecture } from "@/types";
 
 const CourseDetailPage = async ({

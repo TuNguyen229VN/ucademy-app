@@ -1,5 +1,6 @@
 "use server";
 import mongoose from "mongoose";
+
 // singleton connection
 let isConnected: boolean = false;
 export const connectToDatabase = async () => {
@@ -19,5 +20,6 @@ export const connectToDatabase = async () => {
     console.log("Using new database connection");
   } catch (error) {
     console.log("Error while connecting to database");
+    throw error;
   }
 };
