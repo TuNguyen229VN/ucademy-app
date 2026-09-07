@@ -55,7 +55,7 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         autoComplete="off"
       >
-        <FieldGroup className="flex items-center gap-3 justify-between w-full pr-5">
+        <FieldGroup className="grid grid-cols-2 gap-8">
           <Controller
             name="slug"
             control={form.control}
@@ -119,6 +119,7 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
               </Field>
             )}
           />
+           <div></div>
           <Controller
             name="content"
             control={form.control}
