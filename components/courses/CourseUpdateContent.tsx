@@ -146,7 +146,6 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
       toast.error(result.error.issues[0].message);
       return;
     }
-    console.log("lessonEdit", lessonEdit);
     try {
       const res = await updateLesson({
         lessonId,
@@ -390,7 +389,7 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
                 }
                 className="mt-5 ml-auto w-fit block"
               >
-                Thêm bài học mới
+                Thêm bài học
               </Button>
             </div>
           ))}
