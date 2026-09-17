@@ -6,8 +6,10 @@ import {
   IconStudy,
   IconUser,
 } from "@/components/icons";
+import { FormValues } from "@/types";
 import { ECourseLevel, ECourseStatus } from "@/types/enums";
 import { ReactNode } from "react";
+import { ControllerRenderProps } from "react-hook-form";
 
 export const menuItems: {
   url: string;
@@ -100,3 +102,43 @@ export const commonClassNames = {
   paginationButton:
     "size-10 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary border-gray-200 dark:border-gray-200/10 dark:hover:border-primary text-gray-500",
 };
+
+export const editorOptions = (
+  field: ControllerRenderProps<FormValues, "content">,
+  theme: string | undefined,
+) => ({
+  initialValue: "",
+  onBlur: field.onBlur,
+  onEditorChange: (content: string) => field.onChange(content),
+  init: {
+    codesample_global_prismjs: true,
+    skin: theme === "dark" ? "oxide-dark" : "oxide",
+    height: 300,
+    menubar: false,
+    plugins: [
+      "advlist",
+      "autolink",
+      "lists",
+      "link",
+      "image",
+      "charmap",
+      "preview",
+      "anchor",
+      "searchreplace",
+      "visualblocks",
+      "codesample",
+      "fullscreen",
+      "insertdatetime",
+      "media",
+      "table",
+    ],
+    toolbar:
+      "undo redo | " +
+      "codesample | bold italic forecolor | alignleft aligncenter |" +
+      "alignright alignjustify | bullist numlist |" +
+      "image |" +
+      "h1 h2 h3 h4 h5 h6 | preview | fullscreen |" +
+      "link",
+    content_style: `@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');body { font-family: Manrope,Helvetica,Arial,sans-serif; font-size:14px; line-height: 2; padding-bottom: 32px; } img { max-width: 100%; height: auto; display: block; margin: 0 auto; };`,
+  },
+});
