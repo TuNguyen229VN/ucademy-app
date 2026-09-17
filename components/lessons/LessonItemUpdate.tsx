@@ -10,6 +10,11 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { Editor } from "@tinymce/tinymce-react";
+import { useRef } from "react";
+import { useTheme } from "next-themes";
+import { editorOptions } from "@/constants";
+import type { Editor as TinyMCEEditor } from "tinymce";
 
 const formSchema = z.object({
   slug: z.string().optional(),
@@ -25,6 +30,7 @@ const formSchema = z.object({
 });
 
 const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
+  const editorRef = useRef<TinyMCEEditor | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,6 +54,8 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
     } finally {
     }
   }
+
+  const { theme } = useTheme();
   return (
     <div>
       <form
@@ -119,19 +127,32 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
               </Field>
             )}
           />
-           <div></div>
+          <div></div>
           <Controller
             name="content"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field
+                data-invalid={fieldState.invalid}
+                className="col-start-1 col-end-3"
+              >
                 <FieldLabel htmlFor="form-rhf-content">Nội dung *</FieldLabel>
-                <Input
+                {/* <Input
                   {...field}
                   id="form-rhf-content"
                   aria-invalid={fieldState.invalid}
                   placeholder="Nội dung bài học"
                   autoComplete="off"
+                /> */}
+                <Editor
+                  apiKey={process.env.NEXT_PUBLIC_TINY_MCE_API_KEY}
+                  onInit={(_evt, editor) => {
+                    (editorRef.current = editor).setContent(
+                      lesson.content || "",
+                    );
+                  }}
+                  value={field.value}
+                  {...editorOptions(field, theme)}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -140,7 +161,7 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
             )}
           />
         </FieldGroup>
-        <div className="flex justify-end gap-5 items-center mt-4">
+        <div className="flex justify-end gap-5 items-center mt-8">
           <Button type="submit">Cập nhật</Button>
           <Link href="/" className="text-sm text-slate-600">
             Xem trước

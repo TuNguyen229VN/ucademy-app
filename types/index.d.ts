@@ -83,6 +83,14 @@ type TUpdateLessonParams = {
   };
   path?: string;
 };
+
+export type FormValues = {
+  slug?: string;
+  duration?: number;
+  video_url?: string;
+  content?: string;
+};
+
 export {
   TActiveLinkProps,
   TMenuItem,
