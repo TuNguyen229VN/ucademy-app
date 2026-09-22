@@ -137,13 +137,6 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
                 className="col-start-1 col-end-3"
               >
                 <FieldLabel htmlFor="form-rhf-content">Nội dung *</FieldLabel>
-                {/* <Input
-                  {...field}
-                  id="form-rhf-content"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="Nội dung bài học"
-                  autoComplete="off"
-                /> */}
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINY_MCE_API_KEY}
                   onInit={(_evt, editor) => {
