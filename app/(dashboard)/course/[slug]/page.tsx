@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { TUpdateCourseLecture } from "@/types";
+import LessonItem from "@/components/lessons/LessonItem";
 
 const CourseDetailPage = async ({
   params,
@@ -137,16 +138,10 @@ const CourseDetailPage = async ({
                     <AccordionContent  className="bg-transparent! border-none p-0">
                       <div className="mt-3 flex flex-col gap-3">
                       {lecture.lessons.map((lesson) => (
-                        <div
+                        <LessonItem
                           key={lesson._id}
-                          className="flex items-center gap-3 bgDarkMode border borderDarkMode rounded-lg p-3 text-sm font-medium"
-                        >
-                          <IconPlay className="size-4" />
-                          <h4>{lesson.title}</h4>
-                          <span className="ml-auto text-xs font-semibold">
-                            {lesson.duration} phút
-                          </span>
-                        </div>
+                          lesson={lesson}
+                        ></LessonItem>
                       ))}
                     </div>
                     </AccordionContent>
