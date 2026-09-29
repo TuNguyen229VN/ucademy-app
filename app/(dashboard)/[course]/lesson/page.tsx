@@ -37,7 +37,7 @@ const LessonPage = async ({
   const videoId = lessonDetails.video_url?.split("v=").at(-1);
   const lectures = findCourse.lectures || [];
   return (
-    <div className="grid lg:grid-cols-[2fr,1fr] gap-10 min-h-screen">
+    <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
         <div className="relative mb-5 aspect-video">
           <iframe
@@ -70,7 +70,7 @@ const LessonPage = async ({
                     <div>{lecture.title}</div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="!bg-transparent border-none p-0">
+                <AccordionContent className="bg-transparent! border-none p-0">
                   <div className="flex flex-col gap-3 mt-5">
                     {lecture.lessons.map((lesson) => (
                       <LessonItem
