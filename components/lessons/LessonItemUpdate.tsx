@@ -34,10 +34,10 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      slug: lesson.slug,
-      duration: lesson.duration,
-      video_url: lesson.video_url,
-      content: lesson.content,
+      slug: lesson.slug ?? "",
+      duration: lesson.duration ?? 0,
+      video_url: lesson.video_url ?? "",
+      content: lesson.content ?? "",
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
