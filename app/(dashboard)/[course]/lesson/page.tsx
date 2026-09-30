@@ -1,12 +1,9 @@
 import NotFoundPage from "@/app/not-found";
-import { IconLeftArrow, IconRightArrow } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { getCourseBySlug } from "@/lib/actions/course.actions";
 import { findAllLessons, getLessonBySlug } from "@/lib/actions/lesson.actions";
 import LessonNavigation from "./LessonNavigation";
-import { TUpdateCourseLecture } from "@/types";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import LessonItem from "@/components/lessons/LessonItem";
+import LessonContent from "@/components/lessons/LessonContent";
+import Heading from "@/components/typography/Heading";
 
 const LessonPage = async ({
   params,
@@ -37,7 +34,7 @@ const LessonPage = async ({
   const videoId = lessonDetails.video_url?.split("v=").at(-1);
   const lectures = findCourse.lectures || [];
   return (
-    <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
+    <div className="grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-10 min-h-screen items-start">
       <div>
         <div className="relative mb-5 aspect-video">
           <iframe
@@ -45,8 +42,8 @@ const LessonPage = async ({
             src={`https://www.youtube.com/embed/${videoId}`}
           ></iframe>
         </div>
-        <div className="flex items-center justify-between">
-           <LessonNavigation
+        <div className="flex items-center justify-between mb-5">
+          <LessonNavigation
             nextLesson={
               !nextLesson ? "" : `/${course}/lesson?slug=${nextLesson?.slug}`
             }
@@ -56,35 +53,20 @@ const LessonPage = async ({
           ></LessonNavigation>
           <div></div>
         </div>
-      </div>
-       <div>
-        <div className="flex flex-col gap-5">
-          {lectures.map((lecture: TUpdateCourseLecture) => (
-            <Accordion
-              className="w-full"
-              key={lecture._id}
-            >
-              <AccordionItem value={lecture._id.toString()}>
-                <AccordionTrigger>
-                  <div className="flex items-center gap-3 justify-between w-full pr-5">
-                    <div>{lecture.title}</div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="bg-transparent! border-none p-0">
-                  <div className="flex flex-col gap-3 mt-5">
-                    {lecture.lessons.map((lesson) => (
-                      <LessonItem
-                        key={lesson._id}
-                        lesson={lesson}
-                        url={`/${course}/lesson?slug=${lesson.slug}`}
-                      ></LessonItem>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          ))}
+        <Heading className="mb-10">{lessonDetails.title}</Heading>
+        <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
+          <div
+            dangerouslySetInnerHTML={{ __html: lessonDetails.content || "" }}
+          ></div>
         </div>
+      </div>
+
+      <div className="sticky top-5 right-0 max-h-[calc(100svh-100px)] overflow-y-auto">
+        <LessonContent
+          lectures={lectures}
+          course={course}
+          slug={slug}
+        ></LessonContent>
       </div>
     </div>
   );
