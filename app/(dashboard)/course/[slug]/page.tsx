@@ -12,8 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { TUpdateCourseLecture } from "@/types";
-import LessonItem from "@/components/lessons/LessonItem";
+import LessonContent from "@/components/lessons/LessonContent";
 
 const CourseDetailPage = async ({
   params,
@@ -125,30 +124,7 @@ const CourseDetailPage = async ({
           ))}
         </BoxSection>
         <BoxSection title="Nội dung khóa học">
-          <div className="flex flex-col gap-5">
-            {lectures.length > 0 &&
-              lectures.map((lecture: TUpdateCourseLecture) => (
-                <Accordion className="w-full" key={lecture._id.toString()}>
-                  <AccordionItem value={lecture._id}>
-                    <AccordionTrigger>
-                      <div className="flex items-center gap-3 justify-between w-full pr-5">
-                        <div>{lecture.title}</div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent  className="bg-transparent! border-none p-0">
-                      <div className="mt-3 flex flex-col gap-3">
-                      {lecture.lessons.map((lesson) => (
-                        <LessonItem
-                          key={lesson._id}
-                          lesson={lesson}
-                        ></LessonItem>
-                      ))}
-                    </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              ))}
-          </div>
+          <LessonContent lectures={lectures} course="" slug=""></LessonContent>
         </BoxSection>
       </div>
       <div>
