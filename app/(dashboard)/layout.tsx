@@ -10,9 +10,9 @@ import { ReactNode } from "react";
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { userId } = useAuth();
   return (
-    <div className="wrapper block pb-20 lg:pb-0 lg:grid lg:grid-cols-[300px_minmax(0,1fr)] h-screen">
+    <div className="wrapper block pb-20 lg:pb-0 lg:grid lg:grid-cols-[300px_minmax(0,1fr)] min-h-screen">
       <Sidebar />
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-white/50 dark:bg-grayDarker/50 backdrop-blur-md border-t border-t-gray-200 borderDarkMode flex items-center justify-end gap-5 p-3 z-10 ">
+      <div className="lg:hidden fixed top-0 left-0 w-full bg-white/50 dark:bg-grayDarker/50 backdrop-blur-md border-t border-t-gray-200 borderDarkMode flex items-center justify-end gap-5 p-3 z-50 ">
         <ModeToggle />
         {!userId ? (
           <Link
@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           <UserButton />
         )}
       </div>
-      <ul className="flex p-3 bg-white/50 dark:bg-grayDarker/50 backdrop-blur-md border-t border-t-gray-200 borderDarkMode  lg:hidden fixed bottom-0 left-0 w-full justify-center gap-5 h-16 items-center z-10">
+      <ul className="flex p-3 bg-white/50 dark:bg-grayDarker/50 backdrop-blur-md border-t border-t-gray-200 borderDarkMode  lg:hidden fixed bottom-0 left-0 w-full justify-center gap-5 h-16 items-center z-50">
         {menuItems.map((item, index) => (
           <MenuItem
             key={index}

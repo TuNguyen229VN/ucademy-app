@@ -34,7 +34,7 @@ const LessonPage = async ({
   const videoId = lessonDetails.video_url?.split("v=").at(-1);
   const lectures = findCourse.lectures || [];
   return (
-    <div className="grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-10 min-h-screen items-start">
+    <div className="grid xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-10 min-h-screen items-start">
       <div>
         <div className="relative mb-5 aspect-video">
           <iframe
