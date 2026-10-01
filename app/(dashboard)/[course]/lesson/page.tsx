@@ -4,6 +4,7 @@ import { findAllLessons, getLessonBySlug } from "@/lib/actions/lesson.actions";
 import LessonNavigation from "./LessonNavigation";
 import LessonContent from "@/components/lessons/LessonContent";
 import Heading from "@/components/typography/Heading";
+import { getHistory } from "@/lib/actions/history.actions";
 
 const LessonPage = async ({
   params,
@@ -33,6 +34,7 @@ const LessonPage = async ({
   const prevLesson = lessonList?.[currentLessonIndex - 1];
   const videoId = lessonDetails.video_url?.split("v=").at(-1);
   const lectures = findCourse.lectures || [];
+  const histories = await getHistory({ course: courseId });
   return (
     <div className="grid xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-10 min-h-screen items-start">
       <div>
@@ -53,19 +55,25 @@ const LessonPage = async ({
           ></LessonNavigation>
           <div></div>
         </div>
-        <Heading className="mb-10">{lessonDetails.title}</Heading>
-        <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
-          <div
-            dangerouslySetInnerHTML={{ __html: lessonDetails.content || "" }}
-          ></div>
-        </div>
+        <Heading className="mb-8">{lessonDetails.title}</Heading>
+        {lessonDetails.content && (
+          <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
+            <div
+              dangerouslySetInnerHTML={{ __html: lessonDetails.content || "" }}
+            ></div>
+          </div>
+        )}
       </div>
 
       <div className="sticky top-5 right-0 max-h-[calc(100svh-100px)] overflow-y-auto">
+        <div className="h-3 w-full rounded-full border borderDarkMode bgDarkMode mb-2">
+          <div className="h-full rounded-full bg-primary"></div>
+        </div>
         <LessonContent
           lectures={lectures}
           course={course}
           slug={slug}
+          histories={histories ? JSON.parse(JSON.stringify(histories)) : []}
         ></LessonContent>
       </div>
     </div>

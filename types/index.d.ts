@@ -91,6 +91,13 @@ export type FormValues = {
   content?: string;
 };
 
+// History
+export type TCreateHistoryParams = {
+  course: string;
+  lesson: string;
+  checked: boolean | string;
+};
+
 export {
   TActiveLinkProps,
   TMenuItem,
