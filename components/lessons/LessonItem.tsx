@@ -4,6 +4,7 @@ import { IconPlay } from "../icons";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
 import { createHistory } from "@/lib/actions/history.actions";
+import { startTransition, useOptimistic } from "react";
 
 const LessonItem = ({
   lesson,
@@ -21,34 +22,44 @@ const LessonItem = ({
   isActive?: boolean;
   isChecked?: boolean;
 }) => {
-
+  const [optimisticChecked, setOptimisticChecked] = useOptimistic(isChecked);
   const handleCompleteLesson = async (checked: boolean | string) => {
-    try {
-      await createHistory({
-        course: lesson.course,
-        lesson: lesson._id,
-        checked,
-      });
-    } catch (error) {}
+    startTransition(async () => {
+      setOptimisticChecked(!!checked); // đổi UI ngay lập tức
+      try {
+        await createHistory({
+          course: lesson.course,
+          lesson: lesson._id,
+          checked,
+          path: url || "/",
+        });
+      } catch (error) {
+        // lỗi thì useOptimistic tự rollback về isChecked
+      }
+    });
   };
 
   return (
     <div
       className={cn(
         "flex items-center gap-2 bgDarkMode border borderDarkMode rounded-lg p-4 font-medium text-sm",
-        isActive ? "text-primary font-semibold pointer-events-none" : "",
+        isActive ? "text-primary font-semibold" : "",
       )}
     >
       {url && (
         <Checkbox
-          defaultChecked={isChecked}
-          className="size-4 shrink-0"
-          onCheckedChange={(checked) => handleCompleteLesson(checked)}
+          checked={optimisticChecked}
+          className="shrink-0"
+          onCheckedChange={handleCompleteLesson}
         />
       )}
       <IconPlay className="size-5 shrink-0" />
       {url ? (
-        <Link href={url} className="line-clamp-1" title={lesson.title}>
+        <Link
+          href={url}
+          className={cn("line-clamp-1", isActive && "pointer-events-none")}
+          title={lesson.title}
+        >
           {lesson.title}
         </Link>
       ) : (
