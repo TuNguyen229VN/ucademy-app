@@ -35,6 +35,8 @@ const LessonPage = async ({
   const videoId = lessonDetails.video_url?.split("v=").at(-1);
   const lectures = findCourse.lectures || [];
   const histories = await getHistory({ course: courseId });
+  const completePercentage =
+    ((histories?.length || 0) / (lessonList?.length || 1)) * 100;
   return (
     <div className="grid xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-10 min-h-screen items-start">
       <div>
@@ -67,7 +69,12 @@ const LessonPage = async ({
 
       <div className="sticky top-5 right-0 max-h-[calc(100svh-100px)] overflow-y-auto">
         <div className="h-3 w-full rounded-full border borderDarkMode bgDarkMode mb-2">
-          <div className="h-full rounded-full bg-primary"></div>
+          <div
+            className="h-full rounded-full bg-secondary w-0 transition-all duration-300"
+            style={{
+              width: `${completePercentage}%`,
+            }}
+          ></div>
         </div>
         <LessonContent
           lectures={lectures}
