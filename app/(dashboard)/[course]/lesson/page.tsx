@@ -5,6 +5,8 @@ import LessonNavigation from "./LessonNavigation";
 import LessonContent from "@/components/lessons/LessonContent";
 import Heading from "@/components/typography/Heading";
 import { getHistory } from "@/lib/actions/history.actions";
+import { auth } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
 
 const LessonPage = async ({
   params,
@@ -17,11 +19,17 @@ const LessonPage = async ({
     slug: string;
   }>;
 }) => {
+  const { userId } = await auth();
+  if (!userId) return <NotFoundPage />;
+  const findUser = await getUserInfo({ userId });
+  if (!findUser) return <NotFoundPage />;
   const { course } = await params;
   const { slug } = await searchParams;
   const findCourse = await getCourseBySlug({ slug: course });
   if (!findCourse) return null;
   const courseId = findCourse?._id.toString();
+  if (!findUser.courses.some((course) => course.toString() === courseId))
+    return <NotFoundPage />;
   const lessonDetails = await getLessonBySlug({
     slug,
     course: courseId || "",
