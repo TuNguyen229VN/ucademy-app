@@ -3,7 +3,15 @@ import Link from "next/link";
 import { IconClock, IconEye, IconStar } from "../icons";
 import { ICourse } from "@/database/course.model";
 
-const CourseItem = ({ data }: { data: ICourse }) => {
+const CourseItem = ({
+  data,
+  cta,
+  url = "",
+}: {
+  data: ICourse;
+  cta?: string;
+  url?: string;
+}) => {
   const courseInfo = [
     {
       title: data.views,
@@ -20,9 +28,12 @@ const CourseItem = ({ data }: { data: ICourse }) => {
       ),
     },
   ];
+
+   const courseUrl = url ? url : `/course/${data.slug}`;
+
   return (
     <div className="bg-white dark:bg-grayDarker dark:border-gray-200/10 border-gray-200 p-4 rounded-2xl">
-      <Link href={`/course/${data.slug}`} className="block h-45 relative">
+      <Link href={courseUrl} className="block h-45 relative">
         <Image
           src={
             data.image
@@ -56,10 +67,10 @@ const CourseItem = ({ data }: { data: ICourse }) => {
         </div>
       </div>
       <Link
-        href={`/course/${data.slug}`}
+        href={courseUrl}
         className="flex items-center justify-center w-full mt-10 rounded-lg text-white font-semibold bg-primary h-12"
       >
-        Xem chi tiết
+        {cta || "Xem chi tiết"}
       </Link>
     </div>
   );
