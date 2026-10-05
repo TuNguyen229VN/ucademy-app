@@ -277,7 +277,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
                 id="form-rhf-desc"
                 placeholder="Nhập mô tả..."
                 aria-invalid={fieldState.invalid}
-                className="h-50"
+                className="h-62.5"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -291,7 +291,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
               <FieldLabel htmlFor="form-rhf-image">Ảnh đại diện</FieldLabel>
               <div
                 id="form-rhf-image"
-                className="h-50 bg-white rounded-md border border-gray-200 flex items-center justify-center relative"
+                className="h-62.5 bg-white rounded-md border border-gray-200 flex items-center justify-center relative"
               >
                 <UploadButton
                   className="z-10 absolute"
@@ -317,7 +317,7 @@ const CourseUpdate = ({ data }: { data: ICourse }) => {
                     src={imageWatch}
                     alt={data.title}
                     fill
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-md"
                   />
                 )}
               </div>
