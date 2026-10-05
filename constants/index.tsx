@@ -133,7 +133,7 @@ export const editorOptions = (
       "insertdatetime",
       "media",
       "table",
-    ],
+    ],  
     toolbar:
       "undo redo | " +
       "codesample | bold italic forecolor | alignleft aligncenter |" +
