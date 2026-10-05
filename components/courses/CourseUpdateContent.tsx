@@ -23,7 +23,10 @@ import LessonItemUpdate from "../lessons/LessonItemUpdate";
 
 const formSchema = z.object({
   title: z.string().min(5, "Tên chương phải có ít nhất 5 ký tự").optional(),
-  titleLesson: z.string().min(5, "Tên bài học phải có ít nhất 5 ký tự").optional(),
+  titleLesson: z
+    .string()
+    .min(5, "Tên bài học phải có ít nhất 5 ký tự")
+    .optional(),
 });
 
 const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
@@ -32,6 +35,23 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
   const [lectureIdEdit, setLectureIdEdit] = useState("");
   const [lessonEdit, setLessonEdit] = useState("");
   const [lessonIdEdit, setLessonIdEdit] = useState("");
+
+  const idsWithLessons = lectures
+    .filter((l) => l.lessons.length > 0)
+    .map((l) => l._id.toString());
+
+  const [openLectures, setOpenLectures] = useState<string[]>(idsWithLessons);
+  const [knownWithLessons, setKnownWithLessons] =
+    useState<string[]>(idsWithLessons);
+
+  // Chương vừa có bài học đầu tiên (VD vừa bấm "Thêm bài học") -> tự mở, không cần useEffect
+  const newlyFilled = idsWithLessons.filter(
+    (id) => !knownWithLessons.includes(id),
+  );
+  if (newlyFilled.length > 0) {
+    setKnownWithLessons(idsWithLessons);
+    setOpenLectures((prev) => [...prev, ...newlyFilled]);
+  }
 
   const handleAddNewLecture = async () => {
     try {
@@ -181,218 +201,233 @@ const CourseUpdateContent = ({ course }: { course: TCouseUpdateParams }) => {
     <div>
       <div className="flex flex-col gap-5">
         {lectures.length > 0 &&
-          lectures.map((lecture: TUpdateCourseLecture) => (
-            <div key={lecture._id.toString()}>
-              <Accordion className="w-full">
-                <AccordionItem value={lecture._id}>
-                  <AccordionTrigger
-                    render={
-                      lecture._id.toString() === lectureIdEdit ? (
-                        <div />
-                      ) : undefined
-                    }
-                    nativeButton={lecture._id.toString() !== lectureIdEdit}
-                  >
-                    <div className="flex items-center gap-3 justify-between w-full pr-5">
-                      {lecture._id.toString() === lectureIdEdit ? (
-                        <>
-                          <div
-                            className="w-full"
-                            onClick={(e) => e.stopPropagation()}
-                            onKeyDown={(e) => e.stopPropagation()}
-                            onPointerDown={(e) => e.stopPropagation()}
-                          >
-                            <Input
-                              placeholder="Tên chương"
-                              defaultValue={lecture.title}
-                              onChange={(e) => {
-                                e.stopPropagation();
-                                setLectureEdit(e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <span
-                              className={cn(
-                                commonClassNames.action,
-                                "text-green-500",
-                              )}
-                              onClick={(e) =>
-                                handleUpdateLecture(e, lecture._id.toString())
-                              }
+          lectures.map((lecture: TUpdateCourseLecture) => {
+            const lectureId = lecture._id.toString();
+            return (
+              <div key={lectureId}>
+                <Accordion
+                  className="w-full"
+                  value={openLectures.includes(lectureId) ? [lectureId] : []}
+                  onValueChange={(v) =>
+                    setOpenLectures((prev) =>
+                      v.length > 0
+                        ? [...new Set([...prev, lectureId])]
+                        : prev.filter((x) => x !== lectureId),
+                    )
+                  }
+                >
+                  <AccordionItem value={lectureId}>
+                    <AccordionTrigger
+                      render={
+                        lecture._id.toString() === lectureIdEdit ? (
+                          <div />
+                        ) : undefined
+                      }
+                      nativeButton={lecture._id.toString() !== lectureIdEdit}
+                    >
+                      <div className="flex items-center gap-3 justify-between w-full pr-5">
+                        {lecture._id.toString() === lectureIdEdit ? (
+                          <>
+                            <div
+                              className="w-full"
+                              onClick={(e) => e.stopPropagation()}
+                              onKeyDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
                             >
-                              <IconCheck />
-                            </span>
-                            <span
-                              className={cn(
-                                commonClassNames.action,
-                                "text-red-500",
-                              )}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLectureIdEdit("");
-                              }}
-                            >
-                              <IconCancel />
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div>{lecture.title}</div>
-                          <div className="flex gap-2">
-                            <span
-                              className={cn(
-                                commonClassNames.action,
-                                "text-blue-500",
-                              )}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLectureIdEdit(lecture._id.toString());
-                                setLectureEdit(() => lecture.title);
-                              }}
-                            >
-                              <IconEdit />
-                            </span>
-                            <span
-                              className={cn(
-                                commonClassNames.action,
-                                "text-red-500",
-                              )}
-                              onClick={(e) =>
-                                handleDeleteLecture(e, lecture._id.toString())
-                              }
-                            >
-                              <IconDelete />
-                            </span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="border-none bg-transparent!">
-                    <div className="flex flex-col gap-5">
-                      {lecture.lessons.map((lesson: ILesson) => (
-                        <Accordion key={lesson._id.toString()}>
-                          <AccordionItem value={lesson._id}>
-                            <AccordionTrigger
-                              render={
-                                lesson._id.toString() === lessonIdEdit ? (
-                                  <div />
-                                ) : undefined
-                              }
-                              nativeButton={
-                                lesson._id.toString() !== lessonIdEdit
-                              }
-                            >
-                              <div className="flex items-center gap-3 justify-between w-full pr-5">
-                                {lesson._id.toString() === lessonIdEdit ? (
-                                  <>
-                                    <div
-                                      className="w-full"
-                                      onClick={(e) => e.stopPropagation()}
-                                      onKeyDown={(e) => e.stopPropagation()}
-                                      onPointerDown={(e) => e.stopPropagation()}
-                                    >
-                                      <Input
-                                        placeholder="Tên bài học"
-                                        defaultValue={lesson.title}
-                                        onChange={(e) => {
-                                          e.stopPropagation();
-                                          setLessonEdit(e.target.value);
-                                        }}
-                                      />
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <span
-                                        className={cn(
-                                          commonClassNames.action,
-                                          "text-green-500",
-                                        )}
-                                        onClick={(e) =>
-                                          handleUpdateLesson(
-                                            e,
-                                            lesson._id.toString(),
-                                          )
-                                        }
-                                      >
-                                        <IconCheck />
-                                      </span>
-                                      <span
-                                        className={cn(
-                                          commonClassNames.action,
-                                          "text-red-500",
-                                        )}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setLessonIdEdit("");
-                                        }}
-                                      >
-                                        <IconCancel />
-                                      </span>
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    <div>{lesson.title}</div>
-                                    <div className="flex gap-2">
-                                      <span
-                                        className={cn(
-                                          commonClassNames.action,
-                                          "text-blue-500",
-                                        )}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setLessonIdEdit(
-                                            lesson._id.toString(),
-                                          );
-                                          setLessonEdit(() => lesson.title);
-                                        }}
-                                      >
-                                        <IconEdit />
-                                      </span>
-                                      <span
-                                        className={cn(
-                                          commonClassNames.action,
-                                          "text-red-500",
-                                        )}
-                                        onClick={(e) =>
-                                          handleDeleteLesson(
-                                            e,
-                                            lesson._id.toString(),
-                                          )
-                                        }
-                                      >
-                                        <IconDelete />
-                                      </span>
-                                    </div>
-                                  </>
+                              <Input
+                                placeholder="Tên chương"
+                                defaultValue={lecture.title}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  setLectureEdit(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <span
+                                className={cn(
+                                  commonClassNames.action,
+                                  "text-green-500",
                                 )}
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <LessonItemUpdate lesson={lesson} />
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <Button
-                onClick={() =>
-                  handleAddNewLesson(
-                    lecture._id.toString(),
-                    course._id.toString(),
-                  )
-                }
-                className="mt-5 ml-auto w-fit block"
-              >
-                Thêm bài học
-              </Button>
-            </div>
-          ))}
+                                onClick={(e) =>
+                                  handleUpdateLecture(e, lecture._id.toString())
+                                }
+                              >
+                                <IconCheck />
+                              </span>
+                              <span
+                                className={cn(
+                                  commonClassNames.action,
+                                  "text-red-500",
+                                )}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLectureIdEdit("");
+                                }}
+                              >
+                                <IconCancel />
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>{lecture.title}</div>
+                            <div className="flex gap-2">
+                              <span
+                                className={cn(
+                                  commonClassNames.action,
+                                  "text-blue-500",
+                                )}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLectureIdEdit(lecture._id.toString());
+                                  setLectureEdit(() => lecture.title);
+                                }}
+                              >
+                                <IconEdit />
+                              </span>
+                              <span
+                                className={cn(
+                                  commonClassNames.action,
+                                  "text-red-500",
+                                )}
+                                onClick={(e) =>
+                                  handleDeleteLecture(e, lecture._id.toString())
+                                }
+                              >
+                                <IconDelete />
+                              </span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="border-none bg-transparent!">
+                      <div className="flex flex-col gap-5">
+                        {lecture.lessons.map((lesson: ILesson) => (
+                          <Accordion key={lesson._id.toString()}>
+                            <AccordionItem value={lesson._id}>
+                              <AccordionTrigger
+                                render={
+                                  lesson._id.toString() === lessonIdEdit ? (
+                                    <div />
+                                  ) : undefined
+                                }
+                                nativeButton={
+                                  lesson._id.toString() !== lessonIdEdit
+                                }
+                              >
+                                <div className="flex items-center gap-3 justify-between w-full pr-5">
+                                  {lesson._id.toString() === lessonIdEdit ? (
+                                    <>
+                                      <div
+                                        className="w-full"
+                                        onClick={(e) => e.stopPropagation()}
+                                        onKeyDown={(e) => e.stopPropagation()}
+                                        onPointerDown={(e) =>
+                                          e.stopPropagation()
+                                        }
+                                      >
+                                        <Input
+                                          placeholder="Tên bài học"
+                                          defaultValue={lesson.title}
+                                          onChange={(e) => {
+                                            e.stopPropagation();
+                                            setLessonEdit(e.target.value);
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="flex gap-2">
+                                        <span
+                                          className={cn(
+                                            commonClassNames.action,
+                                            "text-green-500",
+                                          )}
+                                          onClick={(e) =>
+                                            handleUpdateLesson(
+                                              e,
+                                              lesson._id.toString(),
+                                            )
+                                          }
+                                        >
+                                          <IconCheck />
+                                        </span>
+                                        <span
+                                          className={cn(
+                                            commonClassNames.action,
+                                            "text-red-500",
+                                          )}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setLessonIdEdit("");
+                                          }}
+                                        >
+                                          <IconCancel />
+                                        </span>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div>{lesson.title}</div>
+                                      <div className="flex gap-2">
+                                        <span
+                                          className={cn(
+                                            commonClassNames.action,
+                                            "text-blue-500",
+                                          )}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setLessonIdEdit(
+                                              lesson._id.toString(),
+                                            );
+                                            setLessonEdit(() => lesson.title);
+                                          }}
+                                        >
+                                          <IconEdit />
+                                        </span>
+                                        <span
+                                          className={cn(
+                                            commonClassNames.action,
+                                            "text-red-500",
+                                          )}
+                                          onClick={(e) =>
+                                            handleDeleteLesson(
+                                              e,
+                                              lesson._id.toString(),
+                                            )
+                                          }
+                                        >
+                                          <IconDelete />
+                                        </span>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <LessonItemUpdate lesson={lesson} />
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <Button
+                  onClick={() =>
+                    handleAddNewLesson(
+                      lecture._id.toString(),
+                      course._id.toString(),
+                    )
+                  }
+                  className="mt-5 ml-auto w-fit block"
+                >
+                  Thêm bài học
+                </Button>
+              </div>
+            );
+          })}
       </div>
       <Button onClick={handleAddNewLecture} className="mt-5">
         Thêm chương mới
