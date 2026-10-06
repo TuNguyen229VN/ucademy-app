@@ -31,14 +31,12 @@ const LessonPage = async ({
   const courseId = findCourse?._id.toString();
   if (!findUser.courses.some((course) => course.toString() === courseId))
     return <NotFoundPage />;
-  const lessonDetails = await getLessonBySlug({
-    slug,
-    course: courseId || "",
-  });
+
   const lessonList = await findAllLessons({ course: courseId || "" });
+  const lessonDetails = lessonList?.find((el) => el.slug === slug);
   if (!lessonDetails) return <NotFoundPage />;
   const currentLessonIndex =
-    lessonList?.findIndex((el) => el.slug === lessonDetails.slug) || 0;
+    lessonList?.findIndex((el) => el.slug === slug) || 0;
   const nextLesson = lessonList?.[currentLessonIndex + 1];
   const prevLesson = lessonList?.[currentLessonIndex - 1];
   const videoId = lessonDetails.video_url?.split("v=").at(-1);

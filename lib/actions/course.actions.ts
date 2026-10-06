@@ -28,6 +28,7 @@ export async function getCourseBySlug({
   try {
     await connectToDatabase();
     const findCourse = await Course.findOne({ slug })
+      .select("_id slug lectures")
       .populate({
         path: "lectures",
         model: Lecture,
