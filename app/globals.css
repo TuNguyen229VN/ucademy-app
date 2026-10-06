@@ -126,6 +126,9 @@
   .focus-primary:focus {
     @apply focus:ring-4 focus:ring-primary focus:ring-black/10;
   }
+  .skeleton {
+    @apply bg-gray-200 dark:bg-grayDarker animate-pulse;
+  }
 }
 
 :root {
